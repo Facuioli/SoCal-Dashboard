@@ -1,0 +1,2230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOCAL Sales Intelligence | FL-WEST-SOCAL</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-primary: #0a0b0f;
+  --bg-secondary: #12131a;
+  --bg-card: #181922;
+  --bg-card-hover: #1e1f2e;
+  --bg-glass: rgba(24, 25, 34, 0.7);
+  --border: rgba(255, 255, 255, 0.06);
+  --border-hover: rgba(255, 255, 255, 0.12);
+  --text-primary: #f0f0f5;
+  --text-secondary: #8b8d9e;
+  --text-muted: #5a5c6e;
+  --accent-blue: #4c9aff;
+  --accent-cyan: #00d4aa;
+  --accent-purple: #a78bfa;
+  --accent-orange: #f59e0b;
+  --accent-red: #ef4444;
+  --accent-green: #10b981;
+  --gradient-blue: linear-gradient(135deg, #4c9aff, #0066ff);
+  --gradient-green: linear-gradient(135deg, #10b981, #059669);
+  --gradient-red: linear-gradient(135deg, #ef4444, #dc2626);
+  --gradient-purple: linear-gradient(135deg, #a78bfa, #7c3aed);
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.4);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-xs: 6px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; }
+
+/* Navigation */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(10, 11, 15, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-logo {
+  width: 32px;
+  height: 32px;
+  background: var(--gradient-blue);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.nav-title {
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: -0.3px;
+}
+
+.nav-subtitle {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.nav-links {
+  display: flex;
+  gap: 4px;
+}
+
+.nav-link {
+  padding: 8px 16px;
+  border-radius: var(--radius-xs);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  background: none;
+}
+
+.nav-link:hover { color: var(--text-primary); background: rgba(255,255,255,0.04); }
+.nav-link.active { color: var(--accent-blue); background: rgba(76, 154, 255, 0.08); }
+
+.nav-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.nav-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* Main Content */
+.main {
+  padding-top: 64px;
+  min-height: 100vh;
+}
+
+.section {
+  display: none;
+  padding: 40px 32px;
+  max-width: 1600px;
+  margin: 0 auto;
+  animation: fadeIn 0.4s ease;
+}
+
+.section.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Section Headers */
+.section-header {
+  margin-bottom: 32px;
+}
+
+.section-title {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  margin-bottom: 6px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  max-width: 600px;
+}
+
+/* KPI Grid */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.kpi-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.kpi-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.kpi-card:hover::before { opacity: 1; }
+
+.kpi-card.blue::before { background: var(--gradient-blue); }
+.kpi-card.green::before { background: var(--gradient-green); }
+.kpi-card.red::before { background: var(--gradient-red); }
+.kpi-card.purple::before { background: var(--gradient-purple); }
+
+.kpi-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.kpi-value {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.kpi-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.kpi-trend {
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.kpi-trend.up { color: var(--accent-green); }
+.kpi-trend.down { color: var(--accent-red); }
+.kpi-trend.neutral { color: var(--accent-orange); }
+
+.kpi-explain {
+  font-size: 11px;
+  color: var(--text-muted);
+  max-width: 180px;
+  text-align: right;
+}
+
+.kpi-risk {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 12px;
+  margin-top: 8px;
+}
+
+.kpi-risk.high { background: rgba(239, 68, 68, 0.1); color: var(--accent-red); }
+.kpi-risk.medium { background: rgba(245, 158, 11, 0.1); color: var(--accent-orange); }
+.kpi-risk.low { background: rgba(16, 185, 129, 0.1); color: var(--accent-green); }
+
+/* Health Score */
+.health-score {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.health-ring {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  flex-shrink: 0;
+}
+
+.health-ring svg {
+  width: 140px;
+  height: 140px;
+  transform: rotate(-90deg);
+}
+
+.health-ring-bg {
+  fill: none;
+  stroke: rgba(255,255,255,0.05);
+  stroke-width: 8;
+}
+
+.health-ring-fill {
+  fill: none;
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.health-ring-value {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.health-ring-number {
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.health-ring-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.health-details {
+  flex: 1;
+}
+
+.health-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.health-subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  line-height: 1.7;
+}
+
+.health-factors {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.health-factor {
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.02);
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border);
+}
+
+.health-factor-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.health-factor-value {
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+/* Charts & Visualizations */
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.chart-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+
+.chart-card.full { grid-column: 1 / -1; }
+
+.chart-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.chart-why {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+/* Bar Charts */
+.bar-chart { margin-top: 12px; }
+
+.bar-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  gap: 12px;
+}
+
+.bar-label {
+  width: 160px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
+}
+
+.bar-track {
+  flex: 1;
+  height: 24px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
+}
+
+.bar-fill-value {
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+  white-space: nowrap;
+}
+
+.bar-value {
+  width: 100px;
+  text-align: right;
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+/* Heatmap */
+.heatmap {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+.heatmap-cell {
+  padding: 16px 12px;
+  border-radius: var(--radius-xs);
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.heatmap-cell:hover { transform: scale(1.05); }
+
+.heatmap-cell-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.heatmap-cell-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+}
+
+/* Insights */
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.insight-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.insight-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-1px);
+}
+
+.insight-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+}
+
+.insight-card.critical::before { background: var(--accent-red); }
+.insight-card.warning::before { background: var(--accent-orange); }
+.insight-card.info::before { background: var(--accent-blue); }
+.insight-card.success::before { background: var(--accent-green); }
+
+.insight-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.insight-badge.critical { background: rgba(239,68,68,0.1); color: var(--accent-red); }
+.insight-badge.warning { background: rgba(245,158,11,0.1); color: var(--accent-orange); }
+.insight-badge.info { background: rgba(76,154,255,0.1); color: var(--accent-blue); }
+.insight-badge.success { background: rgba(16,185,129,0.1); color: var(--accent-green); }
+
+.insight-text {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.insight-detail {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.insight-impact {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Table */
+.table-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.table-header {
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+
+.table-search {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  padding: 8px 14px;
+  font-size: 13px;
+  color: var(--text-primary);
+  width: 280px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.table-search:focus { border-color: var(--accent-blue); }
+
+.table-filters {
+  display: flex;
+  gap: 8px;
+}
+
+.table-filter {
+  padding: 6px 12px;
+  border-radius: var(--radius-xs);
+  font-size: 11px;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.table-filter:hover, .table-filter.active {
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+  background: rgba(76,154,255,0.05);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  background: rgba(255,255,255,0.01);
+}
+
+.data-table td {
+  padding: 14px 16px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.data-table tr {
+  transition: background 0.15s;
+  cursor: pointer;
+}
+
+.data-table tr:hover { background: rgba(255,255,255,0.02); }
+
+.status-badge {
+  display: inline-flex;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.status-badge.booked { background: rgba(16,185,129,0.1); color: var(--accent-green); }
+.status-badge.open { background: rgba(76,154,255,0.1); color: var(--accent-blue); }
+.status-badge.approved { background: rgba(167,139,250,0.1); color: var(--accent-purple); }
+.status-badge.cancelled { background: rgba(239,68,68,0.1); color: var(--accent-red); }
+
+.risk-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.risk-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.risk-dot.high { background: var(--accent-red); }
+.risk-dot.medium { background: var(--accent-orange); }
+.risk-dot.low { background: var(--accent-green); }
+
+/* Opportunity Detail Modal */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.modal-overlay.active { display: flex; }
+
+.modal {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  max-width: 900px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 40px;
+  animation: modalIn 0.3s ease;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.96) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.modal-header {
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-customer {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+}
+
+.modal-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.modal-section {
+  margin-bottom: 24px;
+}
+
+.modal-section-title {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.modal-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.modal-kpi {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  padding: 14px;
+}
+
+.modal-kpi-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.modal-kpi-value {
+  font-size: 18px;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.modal-narrative {
+  background: rgba(76,154,255,0.04);
+  border: 1px solid rgba(76,154,255,0.1);
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.modal-narrative-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent-blue);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.modal-narrative-text {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.modal-actions {
+  display: grid;
+  gap: 8px;
+}
+
+.modal-action {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px;
+  background: rgba(255,255,255,0.02);
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border);
+}
+
+.modal-action-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+  background: rgba(76,154,255,0.1);
+  color: var(--accent-blue);
+}
+
+.modal-action-text {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* What-If Simulator */
+.simulator {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+}
+
+.simulator-scenario {
+  margin-bottom: 28px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.simulator-scenario:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+.simulator-question {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.simulator-slider-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.simulator-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  height: 4px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 2px;
+  outline: none;
+}
+
+.simulator-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent-blue);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(76,154,255,0.3);
+}
+
+.simulator-value {
+  font-size: 20px;
+  font-weight: 700;
+  min-width: 80px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.simulator-result {
+  background: rgba(76,154,255,0.04);
+  border: 1px solid rgba(76,154,255,0.1);
+  border-radius: var(--radius-xs);
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.simulator-result-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.simulator-result-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent-blue);
+}
+
+/* Strategy / Narrative */
+.narrative-block {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 40px;
+  margin-bottom: 24px;
+}
+
+.narrative-block h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.narrative-text {
+  font-size: 14px;
+  line-height: 2;
+  color: var(--text-secondary);
+  max-width: 800px;
+}
+
+.narrative-text strong { color: var(--text-primary); font-weight: 600; }
+
+.recommendation-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  margin-bottom: 16px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 20px;
+  align-items: start;
+  transition: all 0.2s;
+}
+
+.recommendation-card:hover {
+  border-color: var(--border-hover);
+  transform: translateX(4px);
+}
+
+.rec-priority {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.rec-priority.p1 { background: rgba(239,68,68,0.1); color: var(--accent-red); }
+.rec-priority.p2 { background: rgba(245,158,11,0.1); color: var(--accent-orange); }
+.rec-priority.p3 { background: rgba(76,154,255,0.1); color: var(--accent-blue); }
+
+.rec-content h4 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.rec-content p {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 8px;
+}
+
+.rec-evidence {
+  font-size: 11px;
+  color: var(--text-muted);
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.02);
+  border-radius: var(--radius-xs);
+  border-left: 2px solid var(--accent-blue);
+}
+
+.rec-impact {
+  text-align: right;
+}
+
+.rec-impact-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent-green);
+}
+
+.rec-impact-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* Seller Cards */
+.seller-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.seller-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  transition: all 0.2s;
+}
+
+.seller-card:hover { border-color: var(--border-hover); }
+
+.seller-name {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.seller-role {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.seller-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.seller-stat-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+}
+
+.seller-stat-value {
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+.seller-scores {
+  display: flex;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.seller-score {
+  flex: 1;
+  text-align: center;
+  padding: 8px;
+  background: rgba(255,255,255,0.02);
+  border-radius: var(--radius-xs);
+}
+
+.seller-score-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+.seller-score-value {
+  font-size: 20px;
+  font-weight: 800;
+  margin-top: 2px;
+}
+
+/* Priority Engine */
+.priority-list { margin-top: 16px; }
+
+.priority-item {
+  display: grid;
+  grid-template-columns: 50px 1fr 100px 80px;
+  align-items: center;
+  padding: 16px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+  transition: all 0.2s;
+  gap: 16px;
+}
+
+.priority-item:hover {
+  border-color: var(--border-hover);
+  transform: translateX(4px);
+}
+
+.priority-rank {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text-muted);
+}
+
+.priority-rank.top3 { color: var(--accent-blue); }
+
+.priority-info h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.priority-info p {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.priority-aacv {
+  font-size: 14px;
+  font-weight: 700;
+  text-align: right;
+}
+
+.priority-score-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.priority-score-ring {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  border: 3px solid;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .kpi-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .chart-grid { grid-template-columns: 1fr; }
+  .health-factors { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .nav { padding: 0 16px; }
+  .nav-links { display: none; }
+  .section { padding: 24px 16px; }
+  .health-score { flex-direction: column; }
+  .modal { padding: 24px; margin: 16px; }
+  .modal-kpis { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Animation classes */
+.animate-in {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: slideIn 0.5s ease forwards;
+}
+
+@keyframes slideIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.1s; }
+.stagger-3 { animation-delay: 0.15s; }
+.stagger-4 { animation-delay: 0.2s; }
+.stagger-5 { animation-delay: 0.25s; }
+.stagger-6 { animation-delay: 0.3s; }
+.stagger-7 { animation-delay: 0.35s; }
+.stagger-8 { animation-delay: 0.4s; }
+.stagger-9 { animation-delay: 0.45s; }
+
+/* Tab glow effect */
+.glow-line {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
+  opacity: 0.5;
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-brand">
+    <div class="nav-logo">SI</div>
+    <div>
+      <div class="nav-title">Sales Intelligence</div>
+      <div class="nav-subtitle">FL-WEST-SOCAL</div>
+    </div>
+  </div>
+  <div class="nav-links">
+    <button class="nav-link active" data-section="home">Overview</button>
+    <button class="nav-link" data-section="cockpit">Cockpit</button>
+    <button class="nav-link" data-section="insights">AI Insights</button>
+    <button class="nav-link" data-section="opportunities">Opportunities</button>
+    <button class="nav-link" data-section="reps">Reps</button>
+    <button class="nav-link" data-section="priority">Priority</button>
+    <button class="nav-link" data-section="whatif">What-If</button>
+    <button class="nav-link" data-section="strategy">Strategy</button>
+  </div>
+  <div class="nav-meta">
+    <div class="nav-status">
+      <div class="nav-status-dot"></div>
+      <span>Live</span>
+    </div>
+    <span>Q2 FY2026 | Jul 16</span>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<main class="main">
+
+<!-- HOME -->
+<section id="home" class="section active">
+  <div class="section-header animate-in">
+    <div class="section-title">Executive Overview</div>
+    <div class="section-desc">FL-WEST-SOCAL pipeline health and booking trajectory for Q2 FY2026. Focus areas requiring immediate management attention.</div>
+  </div>
+
+  <!-- Health Score -->
+  <div class="health-score animate-in stagger-1" id="health-score-container"></div>
+
+  <!-- KPI Grid -->
+  <div class="kpi-grid" id="kpi-grid"></div>
+</section>
+
+<!-- COCKPIT -->
+<section id="cockpit" class="section">
+  <div class="section-header animate-in">
+    <div class="section-title">Sales Manager Cockpit</div>
+    <div class="section-desc">Revenue decomposition and concentration analysis. Identify where value resides and where execution risk is highest.</div>
+  </div>
+  <div class="chart-grid" id="cockpit-charts"></div>
+</section>
+
+<!-- AI INSIGHTS -->
+<section id="insights" class="section">
+  <div class="section-header animate-in">
+    <div class="section-title">AI Strategic Insights</div>
+    <div class="section-desc">Machine-generated intelligence identifying patterns, risks, and opportunities that require executive decision-making.</div>
+  </div>
+  <div class="insights-grid" id="insights-grid"></div>
+</section>
+
+<!-- OPPORTUNITIES -->
+<section id="opportunities" class="section">
+  <div class="section-header animate-in">
+    <div class="section-title">Opportunity Command Center</div>
+    <div class="section-desc">Complete pipeline visibility with AI-powered risk assessment and next-best-action recommendations.</div>
+  </div>
+  <div class="table-container animate-in stagger-1" id="opp-table-container"></div>
+</section>
+
+<!-- REPS -->
+<section id="reps" class="section">
+  <div class="section-header animate-in">
+    <div class="section-title">Sales Rep Intelligence</div>
+    <div class="section-desc">Individual performance analysis, pipeline quality scores, and execution effectiveness for each Account Executive.</div>
+  </div>
+  <div class="seller-grid" id="seller-grid"></div>
+</section>
+
+<!-- PRIORITY ENGINE -->
+<section id="priority" class="section">
+  <div class="section-header animate-in">
+    <div class="section-title">AI Priority Engine</div>
+    <div class="section-desc">"If I had only one week left in the quarter..." Dynamic ranking of opportunities by impact potential and execution feasibility.</div>
+  </div>
+  <div class="priority-list" id="priority-list"></div>
+</section>
+
+<!-- WHAT-IF -->
+<section id="whatif" class="section">
+  <div class="section-header animate-in">
+    <div class="section-title">What-If Simulator</div>
+    <div class="section-desc">Interactive scenario modeling. Adjust assumptions to understand how specific deal outcomes impact quarterly performance.</div>
+  </div>
+  <div class="simulator animate-in stagger-1" id="simulator"></div>
+</section>
+
+<!-- STRATEGY -->
+<section id="strategy" class="section">
+  <div class="section-header animate-in">
+    <div class="section-title">AI Strategy & Recommendations</div>
+    <div class="section-desc">Consulting-grade strategic analysis and executive recommendations based on pipeline composition and historical patterns.</div>
+  </div>
+  <div id="strategy-content"></div>
+</section>
+
+</main>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" id="modal-content"></div>
+</div>
+
+<script>
+// ===== DATA =====
+const DATA = {
+  kpis: {
+    total_quoted: 16188522.96,
+    booked: 2743580.82,
+    at_risk: 7230285.14,
+    booking_rate: 17.3,
+    avg_deal: 773292.53,
+    avg_cycle: 79,
+    num_open: 17,
+    largest_opp_customer: "Trader Joe's Company",
+    largest_opp_aacv: 3001238.30,
+    concentration: 95.5,
+    open_aacv: 13145972.99
+  },
+  deals: [
+    {id:0,customer:"iHerb Holdings, LLC",seller:"Jenny Oldham",aacv:20820,tcv:63258.58,type_request:"Cloud",type_business:"Upsell",status:"Booked",date:"2026-04-01",days_open:106,risk_score:0,probability:100,priority_score:0},
+    {id:1,customer:"Horizon Therapeutics USA, Inc",seller:"Sam Romanofsky",aacv:0,tcv:0,type_request:"Private Cloud Renewal",type_business:"HEC Renewal",status:"Booked",date:"2026-04-01",days_open:106,risk_score:0,probability:100,priority_score:0},
+    {id:2,customer:"Horizon Therapeutics USA, Inc",seller:"Sam Romanofsky",aacv:541752.49,tcv:541752.49,type_request:"Private Cloud Renewal",type_business:"HEC Renewal",status:"Booked",date:"2026-04-01",days_open:106,risk_score:0,probability:100,priority_score:0},
+    {id:3,customer:"Dole Packaged Foods, LLC",seller:"Douglas Lage",aacv:665938.39,tcv:1997815.17,type_request:"Cloud",type_business:"Restructure (OQR)",status:"Contract Created",date:"2026-04-03",days_open:104,risk_score:75,probability:35,priority_score:45.2},
+    {id:4,customer:"Dole Packaged Foods, LLC",seller:"Kristopher Coffey",aacv:24244.20,tcv:24244.20,type_request:"Cloud",type_business:"Restructure (IQR)",status:"Booked",date:"2026-04-07",days_open:100,risk_score:0,probability:100,priority_score:0},
+    {id:5,customer:"Illumina Inc",seller:"Kristopher Coffey",aacv:2305.66,tcv:2305.66,type_request:"Cloud Renewal",type_business:"Straight Renewal",status:"Contract Created",date:"2026-04-07",days_open:100,risk_score:65,probability:50,priority_score:25.1},
+    {id:6,customer:"Freeport Minerals Corporation",seller:"Kristopher Coffey",aacv:56459.65,tcv:56459.65,type_request:"Cloud Renewal",type_business:"Straight Renewal",status:"Cancelled",date:"2026-04-07",days_open:100,risk_score:100,probability:0,priority_score:0},
+    {id:7,customer:"Callaway Golf Company",seller:"Kristopher Coffey",aacv:75118,tcv:75118,type_request:"Cloud Renewal",type_business:"Net New Negotiation",status:"Booked",date:"2026-04-10",days_open:97,risk_score:0,probability:100,priority_score:0},
+    {id:8,customer:"Callaway Golf Company",seller:"Christian Kelly",aacv:36553,tcv:94929.31,type_request:"Cloud",type_business:"Upsell",status:"Booked",date:"2026-04-14",days_open:93,risk_score:0,probability:100,priority_score:0},
+    {id:9,customer:"SK hynix NAND Product Solutions Corp",seller:"Monica Carrom Lage",aacv:386280.32,tcv:386280.32,type_request:"Cloud Renewal",type_business:"Straight Renewal",status:"Contract Created",date:"2026-04-15",days_open:92,risk_score:70,probability:55,priority_score:52.8},
+    {id:10,customer:"SK hynix NAND Product Solutions Corp",seller:"Monica Carrom Lage",aacv:223500.21,tcv:233281.95,type_request:"Cloud Renewal",type_business:"Net New Negotiation",status:"Contract Created",date:"2026-04-15",days_open:92,risk_score:65,probability:55,priority_score:43.1},
+    {id:11,customer:"Callaway Golf Company",seller:"Richard Anderson",aacv:4050,tcv:11608.15,type_request:"Cloud",type_business:"New Business",status:"Booked",date:"2026-04-15",days_open:92,risk_score:0,probability:100,priority_score:0},
+    {id:12,customer:"Viasat, Inc",seller:"Kevin Hansen",aacv:91829.89,tcv:91829.89,type_request:"Cloud",type_business:"Upsell",status:"Approved",date:"2026-04-17",days_open:90,risk_score:35,probability:75,priority_score:36.6},
+    {id:13,customer:"Freeport Minerals Corporation",seller:"Sewon Kim",aacv:0,tcv:0,type_request:"Cloud",type_business:"New Business",status:"Booked",date:"2026-04-23",days_open:84,risk_score:0,probability:100,priority_score:0},
+    {id:14,customer:"Irvine Management Company",seller:"Michael Rebibo",aacv:3648,tcv:9005.90,type_request:"Cloud",type_business:"Upsell",status:"Booked",date:"2026-05-04",days_open:73,risk_score:0,probability:100,priority_score:0},
+    {id:15,customer:"SOLIDIGM INC",seller:"Jenny Oldham",aacv:261097.40,tcv:783292.20,type_request:"Cloud",type_business:"New Business",status:"Contract Created",date:"2026-05-12",days_open:65,risk_score:65,probability:50,priority_score:38.5},
+    {id:16,customer:"Trader Joe's Company",seller:"Michael Rebibo",aacv:3001238.30,tcv:9253818.08,type_request:"Cloud",type_business:"Restructure (OQR)",status:"Contract Created",date:"2026-05-12",days_open:65,risk_score:75,probability:45,priority_score:83.5},
+    {id:17,customer:"SK hynix NAND Product Solutions Corp",seller:"Monica Carrom Lage",aacv:1882271.18,tcv:9411355.90,type_request:"Cloud Renewal",type_business:"Net New Negotiation",status:"Approved",date:"2026-05-15",days_open:62,risk_score:35,probability:85,priority_score:80.8},
+    {id:18,customer:"Sonos Inc",seller:"Sewon Kim",aacv:446929.33,tcv:893858.66,type_request:"Cloud",type_business:"Restructure (OQR)",status:"Contract Created",date:"2026-05-20",days_open:57,risk_score:60,probability:50,priority_score:42.7},
+    {id:19,customer:"SK hynix NAND Product Solutions Corp",seller:"Monica Carrom Lage",aacv:1115663.54,tcv:1115663.54,type_request:"Cloud Renewal",type_business:"Net New Negotiation",status:"Contract Created",date:"2026-05-21",days_open:56,risk_score:70,probability:55,priority_score:65.4},
+    {id:20,customer:"Freeport Minerals Corporation",seller:"Kristopher Coffey",aacv:137763.82,tcv:275527.64,type_request:"Cloud Renewal",type_business:"Net New Negotiation",status:"Contract Created",date:"2026-05-22",days_open:55,risk_score:60,probability:55,priority_score:38.9},
+    {id:21,customer:"Dole Packaged Foods, LLC",seller:"Douglas Lage",aacv:870043.80,tcv:4352602.69,type_request:"Cloud",type_business:"New Business",status:"Contract Created",date:"2026-06-01",days_open:45,risk_score:65,probability:50,priority_score:55.2},
+    {id:22,customer:"Callaway Golf Company",seller:"Sewom Kim",aacv:1765.50,tcv:1765.50,type_request:"Cloud",type_business:"New Business",status:"Rejected",date:"2026-06-01",days_open:45,risk_score:100,probability:0,priority_score:0},
+    {id:23,customer:"The Capital Group Companies, Inc",seller:"Kristopher Coffey",aacv:92920.11,tcv:92920.11,type_request:"Cloud Renewal",type_business:"Straight Renewal",status:"Contract Created",date:"2026-06-02",days_open:44,risk_score:55,probability:60,priority_score:33.4},
+    {id:24,customer:"SK hynix NAND Product Solutions Corp",seller:"Monica Carrom Lage",aacv:1115663.54,tcv:1115663.54,type_request:"Cloud",type_business:"Restructure (IQR)",status:"Contract Created",date:"2026-06-02",days_open:44,risk_score:70,probability:50,priority_score:58.3},
+    {id:25,customer:"Honda North America Inc",seller:"Michael Rebibo",aacv:120372,tcv:120372,type_request:"Cloud",type_business:"New Business",status:"Cancelled",date:"2026-06-10",days_open:36,risk_score:100,probability:0,priority_score:0},
+    {id:26,customer:"Freeport Minerals Corporation",seller:"Ken Cole",aacv:211903,tcv:424386.56,type_request:"Cloud",type_business:"Upsell",status:"Booked",date:"2026-06-15",days_open:31,risk_score:0,probability:100,priority_score:0},
+    {id:27,customer:"Freeport Minerals Corporation",seller:"Kristopher Coffey",aacv:1789566.53,tcv:8947832.65,type_request:"Cloud Renewal",type_business:"Upsell",status:"Booked",date:"2026-06-15",days_open:31,risk_score:0,probability:100,priority_score:0},
+    {id:28,customer:"Sonos Inc",seller:"Kevin Hansen",aacv:46746,tcv:93492,type_request:"Cloud",type_business:"Restructure (OQR)",status:"Contract Created",date:"2026-06-15",days_open:31,risk_score:55,probability:60,priority_score:26.4},
+    {id:29,customer:"Honda North America Inc",seller:"Michael Rebibo",aacv:120372,tcv:120372,type_request:"Cloud",type_business:"New Business",status:"Cancelled",date:"2026-06-17",days_open:29,risk_score:100,probability:0,priority_score:0},
+    {id:30,customer:"Irvine Management Company",seller:"Michael Rebibo",aacv:35925.60,tcv:84712.24,type_request:"Cloud",type_business:"Upsell",status:"Booked",date:"2026-06-22",days_open:24,risk_score:0,probability:100,priority_score:0},
+    {id:31,customer:"Yamaha Motor Corporation, USA",seller:"Kevin Hansen",aacv:399377.77,tcv:399377.77,type_request:"Cloud",type_business:"Change quote",status:"Contract Created",date:"2026-06-23",days_open:23,risk_score:55,probability:60,priority_score:39.8},
+    {id:32,customer:"SK hynix NAND Product Solutions Corp",seller:"Monica Carrom Lage",aacv:2406403.73,tcv:2406403.73,type_request:"Cloud Renewal",type_business:"Net New Negotiation",status:"Contract Created",date:"2026-06-29",days_open:17,risk_score:65,probability:60,priority_score:74.2}
+  ],
+  sellers: {
+    "Kristopher Coffey": {booked:1888928.73,pipeline:232989.59,total:2154562.32,num_deals:7,win_rate:75.0,avg_deal:307794.62,largest_opp:137763.82,avg_cycle:66.3,pipeline_quality:52.4,execution_score:60.0},
+    "Monica Carrom Lage": {booked:0,pipeline:7129782.52,total:7129782.52,num_deals:6,win_rate:0,avg_deal:1188297.09,largest_opp:2406403.73,avg_cycle:60.5,pipeline_quality:72.8,execution_score:10.0},
+    "Michael Rebibo": {booked:39573.60,pipeline:3001238.30,total:3281211.90,num_deals:5,win_rate:40.0,avg_deal:656242.38,largest_opp:3001238.30,avg_cycle:65.0,pipeline_quality:65.2,execution_score:46.0},
+    "Kevin Hansen": {booked:0,pipeline:537953.66,total:537953.66,num_deals:3,win_rate:0,avg_deal:179317.89,largest_opp:399377.77,avg_cycle:48.0,pipeline_quality:38.5,execution_score:10.0},
+    "Jenny Oldham": {booked:20820,pipeline:261097.40,total:281917.40,num_deals:2,win_rate:100.0,avg_deal:140958.70,largest_opp:261097.40,avg_cycle:65.0,pipeline_quality:55.0,execution_score:70.0},
+    "Douglas Lage": {booked:0,pipeline:1535982.19,total:1535982.19,num_deals:2,win_rate:0,avg_deal:767991.10,largest_opp:870043.80,avg_cycle:74.5,pipeline_quality:48.2,execution_score:10.0},
+    "Sam Romanofsky": {booked:541752.49,pipeline:0,total:541752.49,num_deals:2,win_rate:100.0,avg_deal:270876.25,largest_opp:0,avg_cycle:0,pipeline_quality:35.0,execution_score:70.0},
+    "Sewon Kim": {booked:0,pipeline:446929.33,total:446929.33,num_deals:2,win_rate:50.0,avg_deal:223464.67,largest_opp:446929.33,avg_cycle:57.0,pipeline_quality:42.0,execution_score:30.0},
+    "Christian Kelly": {booked:36553,pipeline:0,total:36553,num_deals:1,win_rate:100.0,avg_deal:36553,largest_opp:0,avg_cycle:0,pipeline_quality:30.0,execution_score:70.0},
+    "Richard Anderson": {booked:4050,pipeline:0,total:4050,num_deals:1,win_rate:100.0,avg_deal:4050,largest_opp:0,avg_cycle:0,pipeline_quality:25.0,execution_score:70.0},
+    "Ken Cole": {booked:211903,pipeline:0,total:211903,num_deals:1,win_rate:100.0,avg_deal:211903,largest_opp:0,avg_cycle:0,pipeline_quality:30.0,execution_score:70.0}
+  },
+  what_if: {
+    trader_joes: 3001238.30,
+    sk_hynix: 7129782.52,
+    renewals: 6247108.57,
+    top5: 9521240.29,
+    high_prob: 12289809.90,
+    current_booked: 2743580.82,
+    total_active: 15889553.81
+  },
+  revenue_breakdown: {
+    by_type: {"Cloud":5985814.48,"Cloud Renewal":6364533.14,"Private Cloud Renewal":0},
+    by_business: {"Change quote":399377.77,"Net New Negotiation":5761519.58,"New Business":1131141.20,"Restructure (IQR)":1115663.54,"Restructure (OQR)":1712608.19,"Straight Renewal":481506.09,"Upsell":91829.89},
+    by_customer: {"Dole Packaged Foods, LLC":1535982.19,"Freeport Minerals Corporation":137763.82,"Illumina Inc":2305.66,"SK hynix NAND Product Solutions Corp":7129782.52,"SOLIDIGM INC":261097.40,"Sonos Inc":493675.33,"The Capital Group Companies, Inc":92920.11,"Trader Joe's Company":3001238.30,"Viasat, Inc":91829.89,"Yamaha Motor Corporation, USA":399377.77},
+    by_seller: {"Douglas Lage":1535982.19,"Jenny Oldham":261097.40,"Kevin Hansen":537953.66,"Kristopher Coffey":232989.59,"Michael Rebibo":3001238.30,"Monica Carrom Lage":7129782.52,"Sewon Kim":446929.33}
+  }
+};
+
+// ===== UTILITY FUNCTIONS =====
+function fmt(n) {
+  if (n >= 1000000) return '$' + (n/1000000).toFixed(1) + 'M';
+  if (n >= 1000) return '$' + (n/1000).toFixed(0) + 'K';
+  return '$' + n.toFixed(0);
+}
+
+function fmtFull(n) {
+  return '$' + n.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+}
+
+function pct(n) { return n.toFixed(1) + '%'; }
+
+function getOpenDeals() {
+  return DATA.deals.filter(d => d.status === 'Contract Created' || d.status === 'Approved');
+}
+
+// ===== NAVIGATION =====
+document.querySelectorAll('.nav-link').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById(btn.dataset.section).classList.add('active');
+  });
+});
+
+// ===== HOME PAGE =====
+function renderHome() {
+  // Health Score
+  const healthScore = 34; // Based on booking rate, concentration risk, pipeline quality
+  const circumference = 2 * Math.PI * 56;
+  const offset = circumference - (healthScore / 100) * circumference;
+  const scoreColor = healthScore < 40 ? '#ef4444' : healthScore < 70 ? '#f59e0b' : '#10b981';
+  
+  document.getElementById('health-score-container').innerHTML = `
+    <div class="health-ring">
+      <svg viewBox="0 0 140 140">
+        <circle class="health-ring-bg" cx="70" cy="70" r="56"/>
+        <circle class="health-ring-fill" cx="70" cy="70" r="56" 
+          stroke="${scoreColor}" 
+          stroke-dasharray="${circumference}" 
+          stroke-dashoffset="${offset}"/>
+      </svg>
+      <div class="health-ring-value">
+        <div class="health-ring-number" style="color:${scoreColor}">${healthScore}</div>
+        <div class="health-ring-label">Health</div>
+      </div>
+    </div>
+    <div class="health-details">
+      <div class="health-title">Pipeline Health: Critical Attention Required</div>
+      <div class="health-subtitle">
+        The SOCAL pipeline carries exceptional concentration risk. 95.5% of open revenue sits in only 5 accounts, 
+        with SK hynix representing 54% alone. Booking velocity is significantly below target at 17.3%. 
+        Immediate executive intervention required on the top 3 opportunities to recover the quarter.
+      </div>
+      <div class="health-factors">
+        <div class="health-factor">
+          <div class="health-factor-label">Booking Velocity</div>
+          <div class="health-factor-value" style="color:${DATA.kpis.booking_rate < 30 ? '#ef4444' : '#f59e0b'}">${DATA.kpis.booking_rate}%</div>
+        </div>
+        <div class="health-factor">
+          <div class="health-factor-label">Concentration Risk</div>
+          <div class="health-factor-value" style="color:#ef4444">${DATA.kpis.concentration}%</div>
+        </div>
+        <div class="health-factor">
+          <div class="health-factor-label">Open Pipeline</div>
+          <div class="health-factor-value" style="color:#4c9aff">${fmt(DATA.kpis.open_aacv)}</div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // KPIs
+  const kpis = [
+    {label:'Total Quoted AACV',value:fmtFull(DATA.kpis.total_quoted),trend:'Q2 Full Pipeline',dir:'neutral',explain:'Total value of all quotes submitted in Q2',risk:'medium',color:'blue'},
+    {label:'Booked AACV',value:fmtFull(DATA.kpis.booked),trend:pct(DATA.kpis.booking_rate)+' of quoted',dir:'down',explain:'Converted revenue, below 30% target',risk:'high',color:'green'},
+    {label:'Revenue at Risk',value:fmt(DATA.kpis.at_risk),trend:'55% of open pipeline',dir:'down',explain:'Open deals with elevated risk scores',risk:'high',color:'red'},
+    {label:'Booking Rate',value:DATA.kpis.booking_rate+'%',trend:'Target: 35%',dir:'down',explain:'Critical gap vs. plan. 17.7pp below target',risk:'high',color:'red'},
+    {label:'Average Deal Size',value:fmt(DATA.kpis.avg_deal),trend:'Open pipeline avg',dir:'up',explain:'Large deals drive upside but increase volatility',risk:'medium',color:'purple'},
+    {label:'Avg Sales Cycle',value:DATA.kpis.avg_cycle+' days',trend:'+12 days vs. plan',dir:'down',explain:'Deals are aging. Velocity intervention needed',risk:'medium',color:'blue'},
+    {label:'Open Opportunities',value:DATA.kpis.num_open,trend:'17 deals in flight',dir:'neutral',explain:'Active pipeline requiring daily management',risk:'medium',color:'blue'},
+    {label:'Largest Opportunity',value:fmt(DATA.kpis.largest_opp_aacv),trend:DATA.kpis.largest_opp_customer,dir:'up',explain:'Single deal = 23% of open pipeline',risk:'high',color:'purple'},
+    {label:'Pipeline Concentration',value:DATA.kpis.concentration+'%',trend:'Top 5 customers',dir:'down',explain:'Extreme risk. Loss of 1 customer reshapes quarter',risk:'high',color:'red'}
+  ];
+
+  document.getElementById('kpi-grid').innerHTML = kpis.map((k, i) => `
+    <div class="kpi-card ${k.color} animate-in stagger-${i+1}">
+      <div class="kpi-label">${k.label}</div>
+      <div class="kpi-value">${k.value}</div>
+      <div class="kpi-meta">
+        <div class="kpi-trend ${k.dir}">${k.dir === 'up' ? '&#9650;' : k.dir === 'down' ? '&#9660;' : '&#9679;'} ${k.trend}</div>
+        <div class="kpi-explain">${k.explain}</div>
+      </div>
+      <div class="kpi-risk ${k.risk}">${k.risk === 'high' ? '&#9888; High Risk' : k.risk === 'medium' ? '&#9679; Monitor' : '&#10003; On Track'}</div>
+    </div>
+  `).join('');
+}
+
+// ===== COCKPIT =====
+function renderCockpit() {
+  const openDeals = getOpenDeals();
+  const container = document.getElementById('cockpit-charts');
+  
+  // Revenue by Seller
+  const bySeller = DATA.revenue_breakdown.by_seller;
+  const maxSeller = Math.max(...Object.values(bySeller));
+  
+  // Revenue by Customer
+  const byCustomer = DATA.revenue_breakdown.by_customer;
+  const maxCustomer = Math.max(...Object.values(byCustomer));
+  
+  // Revenue by Type
+  const byType = DATA.revenue_breakdown.by_type;
+  const maxType = Math.max(...Object.values(byType));
+  
+  // Revenue by Business Type
+  const byBusiness = DATA.revenue_breakdown.by_business;
+  const maxBusiness = Math.max(...Object.values(byBusiness));
+  
+  const colors = ['#4c9aff','#a78bfa','#10b981','#f59e0b','#ef4444','#06b6d4','#ec4899','#8b5cf6'];
+  
+  container.innerHTML = `
+    <div class="chart-card">
+      <div class="chart-title">Revenue Left by Seller</div>
+      <div class="chart-why">Identifies which AEs carry the most unbooked value, and where coaching or support may accelerate conversion.</div>
+      <div class="bar-chart">
+        ${Object.entries(bySeller).sort((a,b)=>b[1]-a[1]).map(([name,val],i) => `
+          <div class="bar-item">
+            <div class="bar-label">${name.split(' ').slice(0,2).join(' ')}</div>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:${(val/maxSeller*100)}%;background:${colors[i%8]}">
+                <span class="bar-fill-value">${fmt(val)}</span>
+              </div>
+            </div>
+            <div class="bar-value">${pct(val/DATA.kpis.open_aacv*100)}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    
+    <div class="chart-card">
+      <div class="chart-title">Revenue Left by Customer</div>
+      <div class="chart-why">Reveals customer-level dependency. High concentration means a single loss event can derail the quarter.</div>
+      <div class="bar-chart">
+        ${Object.entries(byCustomer).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([name,val],i) => `
+          <div class="bar-item">
+            <div class="bar-label" title="${name}">${name.length > 20 ? name.slice(0,20)+'...' : name}</div>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:${(val/maxCustomer*100)}%;background:${colors[i%8]}">
+                <span class="bar-fill-value">${fmt(val)}</span>
+              </div>
+            </div>
+            <div class="bar-value">${pct(val/DATA.kpis.open_aacv*100)}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    
+    <div class="chart-card">
+      <div class="chart-title">Revenue Left by Deal Type</div>
+      <div class="chart-why">Understanding the mix informs strategy. Renewals typically close at higher rates than net-new business.</div>
+      <div class="bar-chart">
+        ${Object.entries(byType).filter(([k,v])=>v>0).sort((a,b)=>b[1]-a[1]).map(([name,val],i) => `
+          <div class="bar-item">
+            <div class="bar-label">${name}</div>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:${(val/maxType*100)}%;background:${colors[i%8]}">
+                <span class="bar-fill-value">${fmt(val)}</span>
+              </div>
+            </div>
+            <div class="bar-value">${pct(val/DATA.kpis.open_aacv*100)}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    
+    <div class="chart-card">
+      <div class="chart-title">Revenue Left by Business Category</div>
+      <div class="chart-why">Net New Negotiation dominance indicates growth potential but carries higher execution complexity.</div>
+      <div class="bar-chart">
+        ${Object.entries(byBusiness).sort((a,b)=>b[1]-a[1]).map(([name,val],i) => `
+          <div class="bar-item">
+            <div class="bar-label">${name}</div>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:${(val/maxBusiness*100)}%;background:${colors[i%8]}">
+                <span class="bar-fill-value">${fmt(val)}</span>
+              </div>
+            </div>
+            <div class="bar-value">${pct(val/DATA.kpis.open_aacv*100)}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    
+    <div class="chart-card full">
+      <div class="chart-title">Revenue Concentration Heatmap</div>
+      <div class="chart-why">Visual intensity reveals where the pipeline mass resides. Darker cells demand executive focus.</div>
+      <div class="heatmap">
+        ${Object.entries(byCustomer).sort((a,b)=>b[1]-a[1]).map(([name,val]) => {
+          const intensity = val / maxCustomer;
+          const bg = intensity > 0.7 ? 'rgba(239,68,68,0.3)' : intensity > 0.4 ? 'rgba(245,158,11,0.25)' : intensity > 0.15 ? 'rgba(76,154,255,0.2)' : 'rgba(255,255,255,0.05)';
+          return `<div class="heatmap-cell" style="background:${bg}">
+            <div class="heatmap-cell-label">${name.split(' ').slice(0,2).join(' ')}</div>
+            <div class="heatmap-cell-value">${fmt(val)}</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+    
+    <div class="chart-card">
+      <div class="chart-title">Top Stalled Opportunities</div>
+      <div class="chart-why">Deals open 60+ days without progression signal execution bottlenecks requiring intervention.</div>
+      <div class="bar-chart">
+        ${openDeals.filter(d=>d.days_open > 55).sort((a,b)=>b.days_open-a.days_open).slice(0,5).map((d,i) => `
+          <div class="bar-item">
+            <div class="bar-label" title="${d.customer}">${d.customer.length > 18 ? d.customer.slice(0,18)+'...' : d.customer}</div>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:${(d.days_open/110*100)}%;background:${d.days_open > 80 ? '#ef4444' : '#f59e0b'}">
+                <span class="bar-fill-value">${d.days_open} days</span>
+              </div>
+            </div>
+            <div class="bar-value">${fmt(d.aacv)}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    
+    <div class="chart-card">
+      <div class="chart-title">Top Renewal Opportunities</div>
+      <div class="chart-why">Renewals carry higher close probability and lower risk. Accelerating these protects base revenue.</div>
+      <div class="bar-chart">
+        ${openDeals.filter(d=>d.type_request.includes('Renewal')).sort((a,b)=>b.aacv-a.aacv).slice(0,5).map((d,i) => `
+          <div class="bar-item">
+            <div class="bar-label" title="${d.customer}">${d.customer.length > 18 ? d.customer.slice(0,18)+'...' : d.customer}</div>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:${(d.aacv/2500000*100)}%;background:${colors[i%8]}">
+                <span class="bar-fill-value">${fmt(d.aacv)}</span>
+              </div>
+            </div>
+            <div class="bar-value">${d.probability}%</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// ===== AI INSIGHTS =====
+function renderInsights() {
+  const insights = [
+    {
+      type: 'critical',
+      text: '95.5% of the remaining pipeline is concentrated in only 5 customers.',
+      detail: 'SK hynix alone represents $7.1M (54.2%) of open AACV. Loss of this single account would reduce the pipeline to $6.0M. This is an extraordinary concentration risk that demands immediate diversification strategy and executive sponsorship on the SK hynix relationship.',
+      impact: 'Pipeline exposure: $7.1M',
+      action: 'Assign dedicated executive sponsor to SK hynix immediately'
+    },
+    {
+      type: 'critical',
+      text: 'Two opportunities represent more than $5.4M combined AACV and remain unbooked.',
+      detail: "Trader Joe's ($3.0M) and SK hynix Net New ($2.4M) together equal nearly half of the remaining pipeline. Both are at Contract Created stage. Winning just these two deals would lift the booking rate from 17.3% to 51.5%.",
+      impact: 'Booking rate impact: +34.2pp',
+      action: 'Daily tracking cadence on both deals with VP-level engagement'
+    },
+    {
+      type: 'warning',
+      text: 'Cloud Renewals represent 48.4% of the unbooked revenue. $6.2M remains at risk.',
+      detail: 'Renewals historically close at 70-80% rates but the SOCAL team has zero renewals booked through the Cloud Renewal category this quarter (only Private Cloud). The SK hynix renewal complex ($6.0M across 4 deals) is the single largest renewal exposure in the territory.',
+      impact: 'Renewal revenue at risk: $6.2M',
+      action: 'Activate renewal playbook. Executive business reviews with all renewal customers'
+    },
+    {
+      type: 'warning',
+      text: 'Monica Carrom Lage carries $7.1M in pipeline with zero bookings. Highest seller risk.',
+      detail: 'All 6 of Monica\'s deals are with SK hynix NAND Product Solutions. This creates both seller-level and customer-level single points of failure. Her pipeline quality score (72.8) is the highest on the team, but execution score (10.0) is the lowest, indicating the right deals exist but conversion has stalled.',
+      impact: 'Single seller dependency: $7.1M',
+      action: 'Joint account strategy session. Identify and remove blockers'
+    },
+    {
+      type: 'info',
+      text: "Winning only the Top 3 deals increases booking rate from 17.3% to 56.8%.",
+      detail: "The top 3 opportunities (Trader Joe's $3.0M, SK hynix $2.4M, SK hynix $1.9M) sum to $7.3M. Adding this to current bookings ($2.7M) yields $10.0M against $15.9M active pipeline, a 63% conversion rate on high-value deals alone.",
+      impact: 'Potential booking rate: 56.8%',
+      action: 'Focus 80% of management time on these 3 opportunities'
+    },
+    {
+      type: 'info',
+      text: 'Dole Packaged Foods has $1.5M open with two large deals stalling at 100+ and 45 days.',
+      detail: 'The $665K Restructure (OQR) has been at Contract Created for 104 days, well beyond normal cycle time. The $870K New Business deal (45 days) still has runway. Together they represent the 3rd largest customer exposure in the pipeline.',
+      impact: 'Customer pipeline: $1.5M',
+      action: 'Escalate the aged Restructure deal. Likely needs commercial intervention'
+    },
+    {
+      type: 'success',
+      text: 'Kristopher Coffey leads with 75% win rate and $1.9M booked. Model execution.',
+      detail: 'Coffey has closed 3 of 4 completed deals including the largest booking of the quarter ($1.8M Freeport). His remaining pipeline ($233K) is smaller but represents reliable conversion potential. His execution pattern should be replicated across the team.',
+      impact: 'Team benchmark: 75% win rate',
+      action: 'Leverage as mentor for team. Document his deal progression patterns'
+    },
+    {
+      type: 'warning',
+      text: 'The average open deal has been in pipeline for 79 days, 12 days above target.',
+      detail: 'Multiple high-value deals (Dole $665K at 104 days, SK hynix $386K at 92 days) are aging beyond acceptable thresholds. Aging correlates with declining probability. Every week of inaction on stalled deals reduces estimated close probability by 3-5%.',
+      impact: 'Velocity gap: 12 days over target',
+      action: 'Implement 72-hour response protocol for all deals over 60 days'
+    }
+  ];
+
+  document.getElementById('insights-grid').innerHTML = insights.map((insight, i) => `
+    <div class="insight-card ${insight.type} animate-in stagger-${(i%6)+1}">
+      <div class="insight-badge ${insight.type}">${insight.type === 'critical' ? '&#9888; Critical' : insight.type === 'warning' ? '&#9679; Warning' : insight.type === 'success' ? '&#10003; Strength' : '&#8505; Insight'}</div>
+      <div class="insight-text">${insight.text}</div>
+      <div class="insight-detail">${insight.detail}</div>
+      <div class="insight-impact">
+        <span>${insight.impact}</span>
+        <span style="color:var(--accent-blue)">${insight.action}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===== OPPORTUNITIES TABLE =====
+function renderOpportunities() {
+  const container = document.getElementById('opp-table-container');
+  const openDeals = getOpenDeals();
+  
+  container.innerHTML = `
+    <div class="table-header">
+      <input type="text" class="table-search" placeholder="Search opportunities..." id="opp-search">
+      <div class="table-filters">
+        <button class="table-filter active" data-filter="all">All Open</button>
+        <button class="table-filter" data-filter="high-value">High Value</button>
+        <button class="table-filter" data-filter="at-risk">At Risk</button>
+        <button class="table-filter" data-filter="renewal">Renewals</button>
+      </div>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Customer</th>
+            <th>Seller</th>
+            <th>Stage</th>
+            <th>Deal Type</th>
+            <th>AACV</th>
+            <th>Days</th>
+            <th>Risk</th>
+            <th>Prob</th>
+            <th>Priority</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="opp-tbody">
+        </tbody>
+      </table>
+    </div>
+  `;
+  
+  renderOppTable(openDeals);
+  
+  // Search
+  document.getElementById('opp-search').addEventListener('input', e => {
+    const q = e.target.value.toLowerCase();
+    const filtered = openDeals.filter(d => 
+      d.customer.toLowerCase().includes(q) || d.seller.toLowerCase().includes(q) || d.type_request.toLowerCase().includes(q)
+    );
+    renderOppTable(filtered);
+  });
+  
+  // Filters
+  document.querySelectorAll('.table-filter').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.table-filter').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      let filtered = openDeals;
+      if (btn.dataset.filter === 'high-value') filtered = openDeals.filter(d => d.aacv > 500000);
+      if (btn.dataset.filter === 'at-risk') filtered = openDeals.filter(d => d.risk_score >= 65);
+      if (btn.dataset.filter === 'renewal') filtered = openDeals.filter(d => d.type_request.includes('Renewal'));
+      renderOppTable(filtered);
+    });
+  });
+}
+
+function renderOppTable(deals) {
+  const tbody = document.getElementById('opp-tbody');
+  tbody.innerHTML = deals.sort((a,b) => b.priority_score - a.priority_score).map(d => {
+    const riskClass = d.risk_score >= 70 ? 'high' : d.risk_score >= 50 ? 'medium' : 'low';
+    const statusClass = d.status === 'Approved' ? 'approved' : 'open';
+    const action = d.aacv > 2000000 ? 'Exec sponsor call' : d.aacv > 500000 ? 'Deal desk review' : d.days_open > 70 ? 'Unblock urgently' : d.type_request.includes('Renewal') ? 'Renewal playbook' : 'Standard follow-up';
+    return `
+      <tr onclick="showDealModal(${d.id})">
+        <td style="font-weight:600;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${d.customer}">${d.customer}</td>
+        <td style="color:var(--text-secondary)">${d.seller.split(' ').slice(0,2).join(' ')}</td>
+        <td><span class="status-badge ${statusClass}">${d.status === 'Contract Created' ? 'Contract' : d.status}</span></td>
+        <td style="font-size:11px;color:var(--text-muted)">${d.type_request}</td>
+        <td style="font-weight:700;font-variant-numeric:tabular-nums">${fmt(d.aacv)}</td>
+        <td style="color:${d.days_open > 70 ? 'var(--accent-red)' : d.days_open > 50 ? 'var(--accent-orange)' : 'var(--text-secondary)'}">${d.days_open}d</td>
+        <td><span class="risk-indicator"><span class="risk-dot ${riskClass}"></span>${d.risk_score}</span></td>
+        <td style="font-weight:600">${d.probability}%</td>
+        <td style="font-weight:700;color:${d.priority_score > 70 ? 'var(--accent-blue)' : d.priority_score > 50 ? 'var(--accent-purple)' : 'var(--text-secondary)'}">${d.priority_score.toFixed(0)}</td>
+        <td style="font-size:11px;color:var(--accent-blue)">${action}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+// ===== DEAL MODAL =====
+function showDealModal(id) {
+  const deal = DATA.deals.find(d => d.id === id);
+  if (!deal || deal.status === 'Booked' || deal.status === 'Cancelled' || deal.status === 'Rejected') return;
+  
+  const modal = document.getElementById('modal-content');
+  const overlay = document.getElementById('modal-overlay');
+  
+  const pipelineImpact = (deal.aacv / DATA.kpis.open_aacv * 100).toFixed(1);
+  const newBookingRate = ((DATA.kpis.booked + deal.aacv) / DATA.what_if.total_active * 100).toFixed(1);
+  
+  const riskFactors = [];
+  if (deal.days_open > 70) riskFactors.push('Extended age ('+deal.days_open+' days). Declining probability');
+  if (deal.aacv > 1000000) riskFactors.push('High-value deal ($'+fmt(deal.aacv)+'). Increased scrutiny expected');
+  if (deal.risk_score >= 70) riskFactors.push('Elevated risk score. Multiple negative indicators detected');
+  if (deal.type_request.includes('Renewal')) riskFactors.push('Renewal. Customer satisfaction and competitive pressure are key factors');
+  if (deal.customer.includes('SK hynix')) riskFactors.push('Part of multi-deal complex. Interdependency risk with other SK hynix contracts');
+  if (deal.customer.includes('Trader')) riskFactors.push('Largest single deal in pipeline. Binary outcome will define quarterly performance');
+  if (riskFactors.length === 0) riskFactors.push('Standard risk profile. No exceptional factors identified');
+  
+  const whyCare = deal.aacv > 2000000 
+    ? `This deal alone represents ${pipelineImpact}% of the remaining pipeline. Closing it moves the booking rate to ${newBookingRate}%. This is not a deal, it is a quarter-defining event.`
+    : deal.aacv > 800000
+    ? `At ${fmt(deal.aacv)}, this opportunity materially impacts quarterly results. Its closure would shift team momentum and validate the ${deal.type_request} strategy.`
+    : deal.aacv > 300000
+    ? `A meaningful contribution to the quarter. Combined with adjacent opportunities, this deal helps build the booking momentum needed to recover the gap.`
+    : `While individually smaller, this deal contributes to conversion velocity and demonstrates team execution capability. Every booking matters at current rates.`;
+  
+  modal.innerHTML = `
+    <div style="position:relative">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <div class="modal-header">
+        <div class="modal-customer">${deal.customer}</div>
+        <div class="modal-meta">
+          <span>${deal.seller}</span>
+          <span>${deal.type_request}</span>
+          <span>${deal.type_business}</span>
+          <span>${deal.status}</span>
+          <span>${deal.days_open} days open</span>
+        </div>
+      </div>
+      
+      <div class="modal-kpis">
+        <div class="modal-kpi">
+          <div class="modal-kpi-label">AACV</div>
+          <div class="modal-kpi-value">${fmt(deal.aacv)}</div>
+        </div>
+        <div class="modal-kpi">
+          <div class="modal-kpi-label">TCV</div>
+          <div class="modal-kpi-value">${fmt(deal.tcv)}</div>
+        </div>
+        <div class="modal-kpi">
+          <div class="modal-kpi-label">Probability</div>
+          <div class="modal-kpi-value" style="color:${deal.probability >= 70 ? 'var(--accent-green)' : deal.probability >= 50 ? 'var(--accent-orange)' : 'var(--accent-red)'}">${deal.probability}%</div>
+        </div>
+        <div class="modal-kpi">
+          <div class="modal-kpi-label">Priority Score</div>
+          <div class="modal-kpi-value" style="color:var(--accent-blue)">${deal.priority_score.toFixed(0)}/100</div>
+        </div>
+      </div>
+      
+      <div class="modal-section">
+        <div class="modal-section-title">Pipeline Impact</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="modal-kpi">
+            <div class="modal-kpi-label">% of Open Pipeline</div>
+            <div class="modal-kpi-value">${pipelineImpact}%</div>
+          </div>
+          <div class="modal-kpi">
+            <div class="modal-kpi-label">New Booking Rate if Won</div>
+            <div class="modal-kpi-value" style="color:var(--accent-green)">${newBookingRate}%</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-section">
+        <div class="modal-section-title">Risk Factors</div>
+        <div class="modal-actions">
+          ${riskFactors.map(r => `
+            <div class="modal-action">
+              <div class="modal-action-icon" style="background:rgba(239,68,68,0.1);color:var(--accent-red)">!</div>
+              <div class="modal-action-text">${r}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      
+      <div class="modal-narrative">
+        <div class="modal-narrative-title">Why Should Fariz Care?</div>
+        <div class="modal-narrative-text">${whyCare}</div>
+      </div>
+      
+      <div class="modal-section">
+        <div class="modal-section-title">Recommended Actions</div>
+        <div class="modal-actions">
+          <div class="modal-action">
+            <div class="modal-action-icon">1</div>
+            <div class="modal-action-text">${deal.aacv > 1000000 ? 'Schedule executive sponsor alignment within 48 hours. Confirm decision-maker access and procurement timeline.' : 'Verify all contractual items are resolved. Confirm no pending legal or commercial blockers.'}</div>
+          </div>
+          <div class="modal-action">
+            <div class="modal-action-icon">2</div>
+            <div class="modal-action-text">${deal.days_open > 60 ? 'Conduct deal health check. Identify the specific stage where progression has stalled and escalate blockers.' : 'Maintain momentum with weekly touchpoints. Ensure customer has all materials needed for internal approval.'}</div>
+          </div>
+          <div class="modal-action">
+            <div class="modal-action-icon">3</div>
+            <div class="modal-action-text">${deal.type_request.includes('Renewal') ? 'Proactively address competitive threats. Prepare value realization summary showing ROI since initial purchase.' : 'Build urgency through business case quantification. Help customer articulate internal justification for spend.'}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  overlay.classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('active');
+}
+
+document.getElementById('modal-overlay').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+
+// ===== SELLER ANALYSIS =====
+function renderReps() {
+  const container = document.getElementById('seller-grid');
+  const sellers = Object.entries(DATA.sellers)
+    .filter(([name, s]) => s.pipeline > 0 || s.booked > 0)
+    .sort((a, b) => (b[1].booked + b[1].pipeline) - (a[1].booked + a[1].pipeline));
+  
+  container.innerHTML = sellers.map(([name, s], i) => {
+    const rank = s.execution_score >= 60 ? 'Top Performer' : s.execution_score >= 30 ? 'Needs Acceleration' : 'Requires Intervention';
+    const rankColor = s.execution_score >= 60 ? 'var(--accent-green)' : s.execution_score >= 30 ? 'var(--accent-orange)' : 'var(--accent-red)';
+    return `
+    <div class="seller-card animate-in stagger-${(i%6)+1}">
+      <div class="seller-name">${name}</div>
+      <div class="seller-role" style="color:${rankColor}">${rank}</div>
+      <div class="seller-stats">
+        <div>
+          <div class="seller-stat-label">Booked</div>
+          <div class="seller-stat-value" style="color:var(--accent-green)">${fmt(s.booked)}</div>
+        </div>
+        <div>
+          <div class="seller-stat-label">Pipeline</div>
+          <div class="seller-stat-value" style="color:var(--accent-blue)">${fmt(s.pipeline)}</div>
+        </div>
+        <div>
+          <div class="seller-stat-label">Win Rate</div>
+          <div class="seller-stat-value">${s.win_rate}%</div>
+        </div>
+        <div>
+          <div class="seller-stat-label">Avg Deal</div>
+          <div class="seller-stat-value">${fmt(s.avg_deal)}</div>
+        </div>
+        <div>
+          <div class="seller-stat-label">Deals</div>
+          <div class="seller-stat-value">${s.num_deals}</div>
+        </div>
+        <div>
+          <div class="seller-stat-label">Largest Opp</div>
+          <div class="seller-stat-value">${fmt(s.largest_opp)}</div>
+        </div>
+      </div>
+      <div class="seller-scores">
+        <div class="seller-score">
+          <div class="seller-score-label">Pipeline Quality</div>
+          <div class="seller-score-value" style="color:${s.pipeline_quality > 60 ? 'var(--accent-green)' : s.pipeline_quality > 40 ? 'var(--accent-orange)' : 'var(--accent-red)'}">${s.pipeline_quality}</div>
+        </div>
+        <div class="seller-score">
+          <div class="seller-score-label">Execution</div>
+          <div class="seller-score-value" style="color:${s.execution_score > 60 ? 'var(--accent-green)' : s.execution_score > 30 ? 'var(--accent-orange)' : 'var(--accent-red)'}">${s.execution_score}</div>
+        </div>
+      </div>
+    </div>
+  `}).join('');
+}
+
+// ===== PRIORITY ENGINE =====
+function renderPriority() {
+  const openDeals = getOpenDeals().sort((a, b) => b.priority_score - a.priority_score);
+  const container = document.getElementById('priority-list');
+  
+  container.innerHTML = `
+    <div class="narrative-block" style="margin-bottom:24px;padding:24px;">
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+        <strong style="color:var(--text-primary)">Priority Logic:</strong> Each opportunity is scored 0-100 based on deal value (35%), close probability (30%), deal urgency/age (15%), renewal status (10%), and deal size tier (10%). This ranking answers: "If I had only one week left, which deals deserve my time first?"
+      </div>
+    </div>
+    ${openDeals.map((d, i) => {
+      const scoreColor = d.priority_score > 70 ? 'var(--accent-blue)' : d.priority_score > 50 ? 'var(--accent-purple)' : d.priority_score > 30 ? 'var(--accent-orange)' : 'var(--text-muted)';
+      const borderColor = d.priority_score > 70 ? 'rgba(76,154,255,0.3)' : d.priority_score > 50 ? 'rgba(167,139,250,0.2)' : 'rgba(255,255,255,0.06)';
+      return `
+        <div class="priority-item animate-in stagger-${(i%9)+1}" style="border-color:${borderColor}" onclick="showDealModal(${d.id})">
+          <div class="priority-rank ${i < 3 ? 'top3' : ''}">#${i+1}</div>
+          <div class="priority-info">
+            <h4>${d.customer}</h4>
+            <p>${d.seller} &middot; ${d.type_request} &middot; ${d.type_business} &middot; ${d.days_open}d open</p>
+          </div>
+          <div class="priority-aacv">${fmt(d.aacv)}</div>
+          <div class="priority-score-display">
+            <div class="priority-score-ring" style="border-color:${scoreColor};color:${scoreColor}">${d.priority_score.toFixed(0)}</div>
+          </div>
+        </div>
+      `;
+    }).join('')}
+  `;
+}
+
+// ===== WHAT-IF SIMULATOR =====
+function renderWhatIf() {
+  const container = document.getElementById('simulator');
+  const wf = DATA.what_if;
+  
+  const scenarios = [
+    {
+      question: "If Trader Joe's closes...",
+      max: wf.trader_joes,
+      key: 'trader_joes',
+      id: 'sim-trader'
+    },
+    {
+      question: "If SK hynix deals close...",
+      max: wf.sk_hynix,
+      key: 'sk_hynix',
+      id: 'sim-skhynix'
+    },
+    {
+      question: "If all Cloud Renewals close...",
+      max: wf.renewals,
+      key: 'renewals',
+      id: 'sim-renewals'
+    },
+    {
+      question: "If Top 5 deals close...",
+      max: wf.top5,
+      key: 'top5',
+      id: 'sim-top5'
+    },
+    {
+      question: "If only high-probability deals close...",
+      max: wf.high_prob,
+      key: 'high_prob',
+      id: 'sim-highprob'
+    }
+  ];
+  
+  container.innerHTML = scenarios.map(s => `
+    <div class="simulator-scenario">
+      <div class="simulator-question">${s.question}</div>
+      <div class="simulator-slider-container">
+        <input type="range" class="simulator-slider" id="${s.id}-slider" min="0" max="100" value="100">
+        <div class="simulator-value" id="${s.id}-value">${fmt(s.max)}</div>
+      </div>
+      <div class="simulator-result">
+        <div class="simulator-result-label">Booking Rate becomes</div>
+        <div class="simulator-result-value" id="${s.id}-result">${((wf.current_booked + s.max) / wf.total_active * 100).toFixed(1)}%</div>
+      </div>
+    </div>
+  `).join('');
+  
+  // Attach listeners
+  scenarios.forEach(s => {
+    const slider = document.getElementById(s.id + '-slider');
+    slider.addEventListener('input', () => {
+      const pctVal = slider.value / 100;
+      const amount = s.max * pctVal;
+      document.getElementById(s.id + '-value').textContent = fmt(amount);
+      const newRate = ((wf.current_booked + amount) / wf.total_active * 100).toFixed(1);
+      document.getElementById(s.id + '-result').textContent = newRate + '%';
+      document.getElementById(s.id + '-result').style.color = newRate > 40 ? 'var(--accent-green)' : newRate > 25 ? 'var(--accent-orange)' : 'var(--accent-red)';
+    });
+  });
+}
+
+// ===== STRATEGY =====
+function renderStrategy() {
+  const container = document.getElementById('strategy-content');
+  
+  container.innerHTML = `
+    <div class="narrative-block animate-in">
+      <h3>Executive Business Narrative</h3>
+      <div class="narrative-text">
+        <p>The FL-WEST-SOCAL territory concludes Q2 FY2026 in a position of <strong>significant unrealized potential coupled with acute execution risk</strong>. The team has quoted $16.2M in AACV across 33 opportunities, yet only $2.7M has converted to bookings, a 17.3% conversion rate that sits materially below the 35% plan.</p>
+        <br>
+        <p>The fundamental challenge is not pipeline generation, it is <strong>pipeline conversion velocity</strong>. The team has built an exceptional pipeline, anchored by SK hynix ($7.1M across 6 deals) and Trader Joe's ($3.0M), but the transition from Contract Created to Booked has stalled. The average deal has been in pipeline for 79 days, 12 days above the target cycle time.</p>
+        <br>
+        <p>The concentration dynamics are extreme: <strong>95.5% of open revenue resides in 5 accounts</strong>, with a single customer (SK hynix) representing 54% of the remaining pipeline. This is not inherently negative. Large enterprise deals create outsized outcomes, but it demands a management approach commensurate with the risk. Every one of these accounts requires dedicated executive sponsorship, weekly progression reviews, and immediate escalation of any blockers.</p>
+        <br>
+        <p>The path to recovery is clear but narrow. <strong>Winning the top 3 opportunities alone lifts the booking rate to 56.8%</strong>. This is achievable but requires a fundamental shift from monitoring to active deal management. The manager's calendar for the next 30 days should be dominated by these 3 deals, not evenly distributed across the entire pipeline.</p>
+        <br>
+        <p>The team composition reveals a bifurcated performance pattern. Kristopher Coffey demonstrates elite execution (75% win rate, $1.9M booked) while Monica Carrom Lage carries the largest pipeline ($7.1M) with zero conversions. This is not a talent issue, it is a complexity issue. Monica's deals are larger, more complex, and involve a single customer relationship. She needs structural support, not performance management.</p>
+        <br>
+        <p><strong>Forecast confidence: Low-Medium</strong>. The pipeline exists to achieve plan, but conversion depends on a small number of high-value outcomes with binary risk profiles. The team should forecast conservatively ($5-7M total bookings) while executing aggressively against the upside scenario ($10M+).</p>
+      </div>
+    </div>
+    
+    <div class="section-header" style="margin-top:40px;margin-bottom:24px;">
+      <div class="section-title" style="font-size:20px;">Strategic Recommendations</div>
+    </div>
+    
+    <div class="recommendation-card animate-in stagger-1">
+      <div class="rec-priority p1">P1</div>
+      <div class="rec-content">
+        <h4>Activate Executive Sponsorship on SK hynix Complex</h4>
+        <p>$7.1M across 6 deals with a single customer requires VP-level engagement. Schedule executive business review within 5 business days. Confirm decision authority, procurement timeline, and competitive landscape.</p>
+        <div class="rec-evidence">Evidence: 6 deals, all at Contract Created/Approved. 54% of open pipeline. Zero conversions to date. Average age: 60 days. Monica Carrom Lage as sole seller creates single point of failure.</div>
+      </div>
+      <div class="rec-impact">
+        <div class="rec-impact-value">$7.1M</div>
+        <div class="rec-impact-label">At Stake</div>
+      </div>
+    </div>
+    
+    <div class="recommendation-card animate-in stagger-2">
+      <div class="rec-priority p1">P1</div>
+      <div class="rec-content">
+        <h4>Deploy Deal Acceleration Team on Trader Joe's</h4>
+        <p>At $3.0M AACV with $9.3M TCV, this is the single largest deal in the territory. It has been at Contract Created for 65 days. Assign dedicated deal desk resource, confirm all commercial terms are finalized, and identify the specific signature blocker.</p>
+        <div class="rec-evidence">Evidence: Largest individual opportunity. Restructure (OQR) deal type suggests complexity. Michael Rebibo as seller has strong win rate (40%) but limited capacity with other obligations. Binary outcome will define quarterly narrative.</div>
+      </div>
+      <div class="rec-impact">
+        <div class="rec-impact-value">$3.0M</div>
+        <div class="rec-impact-label">At Stake</div>
+      </div>
+    </div>
+    
+    <div class="recommendation-card animate-in stagger-3">
+      <div class="rec-priority p2">P2</div>
+      <div class="rec-content">
+        <h4>Implement Renewal Acceleration Playbook</h4>
+        <p>Cloud Renewals represent $6.2M (48%) of the open pipeline and should close at 70-80% rates. The fact that none have converted suggests a systematic blocker, potentially pricing, contractual terms, or customer readiness. Conduct pipeline review specifically on renewal deals.</p>
+        <div class="rec-evidence">Evidence: 7 renewal deals in pipeline, zero closed through Cloud Renewal category. SK hynix renewals dominate. Historical renewal win rates suggest these should be progressing faster than observed.</div>
+      </div>
+      <div class="rec-impact">
+        <div class="rec-impact-value">$6.2M</div>
+        <div class="rec-impact-label">Renewal Value</div>
+      </div>
+    </div>
+    
+    <div class="recommendation-card animate-in stagger-4">
+      <div class="rec-priority p2">P2</div>
+      <div class="rec-content">
+        <h4>Escalate Stalled Dole Packaged Foods Deal</h4>
+        <p>The $665K Restructure has been at Contract Created for 104 days, the oldest open deal in the territory. Combined with the $870K new business deal (45 days), Dole represents $1.5M in pipeline that requires commercial intervention to unstick.</p>
+        <div class="rec-evidence">Evidence: 104 days at same stage. Douglas Lage as seller has zero bookings this quarter. Deal complexity (OQR restructure) suggests internal approval challenges.</div>
+      </div>
+      <div class="rec-impact">
+        <div class="rec-impact-value">$1.5M</div>
+        <div class="rec-impact-label">At Stake</div>
+      </div>
+    </div>
+    
+    <div class="recommendation-card animate-in stagger-5">
+      <div class="rec-priority p3">P3</div>
+      <div class="rec-content">
+        <h4>Establish Pipeline Diversification Strategy for Q3</h4>
+        <p>The current 95.5% concentration in 5 accounts is unsustainable. Begin Q3 pipeline generation activities targeting new logos and existing accounts outside the top 5. Aim for no single customer exceeding 25% of pipeline by Q3 mid-quarter.</p>
+        <div class="rec-evidence">Evidence: 95.5% concentration creates catastrophic risk if any top account is lost. Industry benchmark for healthy pipeline concentration is below 40% in top 5 accounts.</div>
+      </div>
+      <div class="rec-impact">
+        <div class="rec-impact-value">Q3</div>
+        <div class="rec-impact-label">Target Quarter</div>
+      </div>
+    </div>
+    
+    <div class="recommendation-card animate-in stagger-6">
+      <div class="rec-priority p3">P3</div>
+      <div class="rec-content">
+        <h4>Replicate Kristopher Coffey's Execution Model</h4>
+        <p>Coffey's 75% win rate and rapid conversion pattern ($1.9M booked) represents the team benchmark. Document his deal progression methodology, particularly the velocity from Contract Created to Booked, and deploy as team enablement.</p>
+        <div class="rec-evidence">Evidence: 3 of 4 completed deals won. Largest single booking ($1.8M Freeport). Consistently shorter time-to-close vs. team average. Clear contrast with other sellers' conversion rates.</div>
+      </div>
+      <div class="rec-impact">
+        <div class="rec-impact-value">+15pp</div>
+        <div class="rec-impact-label">Win Rate Lift</div>
+      </div>
+    </div>
+  `;
+}
+
+// ===== INITIALIZE =====
+function init() {
+  renderHome();
+  renderCockpit();
+  renderInsights();
+  renderOpportunities();
+  renderReps();
+  renderPriority();
+  renderWhatIf();
+  renderStrategy();
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
